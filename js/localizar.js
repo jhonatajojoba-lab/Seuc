@@ -12,6 +12,17 @@ let selectedAlertType = "SOS Emergência";
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   currentToken = urlParams.get("token");
+  const queryNome = urlParams.get("nome");
+  const queryTipo = urlParams.get("tipo");
+
+  if (queryNome) {
+    const dispNome = document.getElementById("disp-nome");
+    if (dispNome) dispNome.textContent = queryNome;
+  }
+  if (queryTipo) {
+    const dispMotivo = document.getElementById("disp-motivo");
+    if (dispMotivo) dispMotivo.textContent = queryTipo;
+  }
 
   // Configurar botões de tipo de alerta
   document.querySelectorAll(".btn-alert-pill").forEach((btn) => {
@@ -146,6 +157,19 @@ async function iniciarLocalizacao() {
 async function enviarLocalizacaoParaDelegacia(lat, lng, precisao) {
   lastKnownLat = lat;
   lastKnownLng = lng;
+
+  // Transmitir via localStorage para sincronização instantânea em tela e abas
+  if (currentToken) {
+    try {
+      localStorage.setItem(`sirc_loc_${currentToken}`, JSON.stringify({
+        lat,
+        lng,
+        precisao,
+        time: Date.now()
+      }));
+    } catch (e) {}
+  }
+
   try {
     const payload = {
       token: currentToken,
@@ -196,6 +220,19 @@ async function emitirAlertaPolicial() {
           { timeout: 3000, enableHighAccuracy: true }
         );
       });
+    } catch (e) {}
+  }
+
+  // Transmitir via localStorage para atualização instantânea no mapa policial
+  if (currentToken) {
+    try {
+      localStorage.setItem(`sirc_alert_${currentToken}`, JSON.stringify({
+        tipoAlerta: selectedAlertType || "SOS Emergência",
+        mensagem: customMsg || "Alerta emitido pelo cidadão através do portal SIRC.",
+        lat: lastKnownLat,
+        lng: lastKnownLng,
+        time: Date.now()
+      }));
     } catch (e) {}
   }
 
