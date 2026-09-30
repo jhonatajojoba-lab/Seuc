@@ -936,8 +936,13 @@
             await fetchTrackingFromFirebase();
             renderAllTacticalElements();
           } else {
+            let errorMsg = "Erro ao gravar dados no Firebase. Tente novamente.";
+            try {
+              const errData = await res.json();
+              if (errData && errData.error) errorMsg = errData.error;
+            } catch (e) {}
             if (window.Store && Store.toast) {
-              Store.toast("Erro ao gravar dados no Firebase. Tente novamente.", "error");
+              Store.toast(errorMsg, "error");
             }
           }
         } catch (err) {
