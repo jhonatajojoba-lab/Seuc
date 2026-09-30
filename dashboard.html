@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIRC — Polícia Civil do Maranhão &bull; Visão Geral</title>
+  <meta name="description" content="Painel de Controle e Inteligência Policial — Polícia Civil do Estado do Maranhão" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/registros.css" />
+</head>
+<body class="dashboard-body">
+
+  <!-- Quota defense banner mandated for Google Maps Demo Key -->
+  <div id="gmp-quota-banner" style="display:none; background:#fffbeb; border-bottom:1px solid #fde68a; color:#78350f; padding:10px 16px; font-size:13px; text-align:center; position:sticky; top:0; z-index:9999; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+    <span>
+      Google Maps Platform quota reached. If you are the app owner, visit
+      <a href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors" target="_blank" rel="noopener noreferrer" style="text-decoration:underline; font-weight:600; color:#451a03;">
+        maps developer site
+      </a> for instructions to update your account.
+    </span>
+  </div>
+
+  <div class="ambient-light"></div>
+  <div class="ambient-light-2"></div>
+
+  <div class="app-shell">
+    <!-- Sidebar Oficial -->
+    <aside id="app-sidebar"></aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main dashboard-main-content">
+      
+      <!-- Hero Header Panorâmico (Fundo contínuo integrando barra de pesquisa, título e arte tática) -->
+      <section class="dashboard-hero-header animate-fade-in">
+        <div class="hero-bg-layer">
+          <img src="img/A821450B-1303-4FB0-860C-1BF8CB851B42.png" alt="Polícia Civil Tática" class="hero-bg-image" />
+          <img src="img/5C94940E-CCCC-45A4-B8DE-9CCD0839711B.png" alt="Brasão Polícia Civil MA" class="hero-bg-shield" />
+          <div class="hero-bg-overlay"></div>
+        </div>
+
+        <!-- Barra Superior (Top Navigation Bar) sobre o fundo panorâmico -->
+        <header class="top-nav-bar">
+          <div class="top-nav-left">
+            <button type="button" class="btn-icon-nav" id="btn-toggle-sidebar" aria-label="Menu Lateral">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            
+            <div class="top-search-box">
+              <svg viewBox="0 0 24 24" width="16" height="16" class="search-lens" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Buscar por nome, CPF, número de registro, veículo, endereço..."
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div class="top-nav-right">
+            <button type="button" class="btn-icon-nav notification-btn" title="Notificações do Sistema">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <span class="badge-dot-count">1</span>
+            </button>
+            <button type="button" class="btn-icon-nav" id="btn-theme-toggle" title="Modo de Exibição">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Informações Oficiais Hero (direto sobre o plano de fundo, sem card ou caixa) -->
+        <div class="hero-title-content">
+          <h1 class="hero-main-title">Polícia Civil do Maranhão</h1>
+          <p class="hero-main-desc">
+            Integração, inteligência e tecnologia a serviço da sociedade.
+          </p>
+        </div>
+      </section>
+
+      <!-- Container do Dashboard -->
+      <div class="dashboard-container">
+
+        <!-- Resultados de busca dinâmica (se houver pesquisa) -->
+        <div id="overview-results-wrap" style="display:none; margin-bottom: 24px;"></div>
+
+        <div id="dashboard-standard-view">
+
+          <!-- Grade dos 4 Cards de Métricas — Módulos Oficiais do Sistema -->
+          <section class="metrics-grid-row animate-fade-in">
+            
+            <!-- Card 1: Registros -->
+            <a href="registros.html" class="metric-card metric-card-clickable" style="text-decoration:none; color:inherit;">
+              <div class="metric-top-row">
+                <span class="metric-title">Registros</span>
+                <div class="mini-sparkline-bars">
+                  <span style="height: 35%;"></span>
+                  <span style="height: 60%;"></span>
+                  <span style="height: 45%;"></span>
+                  <span style="height: 80%;"></span>
+                </div>
+              </div>
+              <div class="metric-body">
+                <span class="metric-number" id="dash-count-registros">1.248</span>
+              </div>
+            </a>
+
+            <!-- Card 2: Localizador -->
+            <a href="mapa.html" class="metric-card metric-card-clickable" style="text-decoration:none; color:inherit;">
+              <div class="metric-top-row">
+                <span class="metric-title">Localizador</span>
+                <div class="mini-sparkline-bars">
+                  <span style="height: 50%;"></span>
+                  <span style="height: 40%;"></span>
+                  <span style="height: 75%;"></span>
+                  <span style="height: 90%;"></span>
+                </div>
+              </div>
+              <div class="metric-body">
+                <span class="metric-number" id="dash-count-localizador">Ativo</span>
+              </div>
+            </a>
+
+            <!-- Card 3: Auditoria -->
+            <a href="auditoria.html" class="metric-card metric-card-clickable" style="text-decoration:none; color:inherit;">
+              <div class="metric-top-row">
+                <span class="metric-title">Auditoria</span>
+                <div class="mini-sparkline-bars">
+                  <span style="height: 40%;"></span>
+                  <span style="height: 55%;"></span>
+                  <span style="height: 70%;"></span>
+                  <span style="height: 85%;"></span>
+                </div>
+              </div>
+              <div class="metric-body">
+                <span class="metric-number" id="dash-count-auditoria">100%</span>
+              </div>
+            </a>
+
+            <!-- Card 4: Chats -->
+            <a href="chats.html" class="metric-card metric-card-clickable" style="text-decoration:none; color:inherit;">
+              <div class="metric-top-row">
+                <span class="metric-title">Chats & Mensagens</span>
+                <div class="mini-sparkline-bars">
+                  <span style="height: 80%;"></span>
+                  <span style="height: 65%;"></span>
+                  <span style="height: 50%;"></span>
+                  <span style="height: 40%;"></span>
+                </div>
+              </div>
+              <div class="metric-body">
+                <span class="metric-number" id="dash-count-chats">Online</span>
+              </div>
+            </a>
+
+          </section>
+
+          <!-- Linha Central: Gráfico de Ocorrências por Tipo & Lista de Ocorrências Recentes -->
+          <section class="dashboard-double-row animate-fade-in">
+            
+            <!-- Coluna Esquerda: Gráfico de Barras -->
+            <div class="dashboard-panel card-panel">
+              <div class="panel-header">
+                <h3>Ocorrências por Tipo</h3>
+                <div class="panel-select-pill">
+                  <span>Últimos 30 dias</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+
+              <!-- Bar Chart Container -->
+              <div class="bar-chart-container">
+                <div class="bar-chart-y-axis">
+                  <span>200</span>
+                  <span>150</span>
+                  <span>100</span>
+                  <span>50</span>
+                  <span>0</span>
+                </div>
+
+                <div class="bar-chart-plot-area">
+                  <div class="grid-line" style="bottom: 100%;"></div>
+                  <div class="grid-line" style="bottom: 75%;"></div>
+                  <div class="grid-line" style="bottom: 50%;"></div>
+                  <div class="grid-line" style="bottom: 25%;"></div>
+                  <div class="grid-line" style="bottom: 0%;"></div>
+
+                  <div class="bars-flex-row">
+                    <!-- Furto -->
+                    <div class="bar-column">
+                      <span class="bar-val-label">182</span>
+                      <div class="bar-pill" style="height: 91%;"></div>
+                      <span class="bar-name-label">Furto</span>
+                    </div>
+
+                    <!-- Roubo -->
+                    <div class="bar-column">
+                      <span class="bar-val-label">124</span>
+                      <div class="bar-pill" style="height: 62%;"></div>
+                      <span class="bar-name-label">Roubo</span>
+                    </div>
+
+                    <!-- Tráfico -->
+                    <div class="bar-column">
+                      <span class="bar-val-label">96</span>
+                      <div class="bar-pill" style="height: 48%;"></div>
+                      <span class="bar-name-label">Tráfico</span>
+                    </div>
+
+                    <!-- Violência -->
+                    <div class="bar-column">
+                      <span class="bar-val-label">78</span>
+                      <div class="bar-pill" style="height: 39%;"></div>
+                      <span class="bar-name-label">Violência</span>
+                    </div>
+
+                    <!-- Homicídio -->
+                    <div class="bar-column">
+                      <span class="bar-val-label">43</span>
+                      <div class="bar-pill" style="height: 22%;"></div>
+                      <span class="bar-name-label">Homicídio</span>
+                    </div>
+
+                    <!-- Outros -->
+                    <div class="bar-column">
+                      <span class="bar-val-label">67</span>
+                      <div class="bar-pill" style="height: 34%;"></div>
+                      <span class="bar-name-label">Outros</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coluna Direita: Ocorrências Recentes -->
+            <div class="dashboard-panel card-panel">
+              <div class="panel-header">
+                <h3>Ocorrências Recentes</h3>
+                <a href="registros.html" class="panel-action-link">
+                  Ver todas &rarr;
+                </a>
+              </div>
+
+              <div class="recent-incidents-list">
+                
+                <div class="recent-incident-item">
+                  <div class="incident-left">
+                    <span class="status-dot green"></span>
+                    <strong class="incident-name">Roubo a estabelecimento</strong>
+                  </div>
+                  <div class="incident-right">
+                    <span class="incident-loc-pill">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      São Luís - MA
+                    </span>
+                    <span class="incident-datetime">28/09/2026 14:32</span>
+                    <svg viewBox="0 0 24 24" class="incident-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+
+                <div class="recent-incident-item">
+                  <div class="incident-left">
+                    <span class="status-dot blue"></span>
+                    <strong class="incident-name">Tráfico de entorpecentes</strong>
+                  </div>
+                  <div class="incident-right">
+                    <span class="incident-loc-pill">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      Imperatriz - MA
+                    </span>
+                    <span class="incident-datetime">28/09/2026 11:18</span>
+                    <svg viewBox="0 0 24 24" class="incident-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+
+                <div class="recent-incident-item">
+                  <div class="incident-left">
+                    <span class="status-dot yellow"></span>
+                    <strong class="incident-name">Furto de veículo</strong>
+                  </div>
+                  <div class="incident-right">
+                    <span class="incident-loc-pill">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      Timon - MA
+                    </span>
+                    <span class="incident-datetime">28/09/2026 09:47</span>
+                    <svg viewBox="0 0 24 24" class="incident-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+
+                <div class="recent-incident-item">
+                  <div class="incident-left">
+                    <span class="status-dot red"></span>
+                    <strong class="incident-name">Homicídio</strong>
+                  </div>
+                  <div class="incident-right">
+                    <span class="incident-loc-pill">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      Caxias - MA
+                    </span>
+                    <span class="incident-datetime">27/09/2026 22:13</span>
+                    <svg viewBox="0 0 24 24" class="incident-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+
+                <div class="recent-incident-item">
+                  <div class="incident-left">
+                    <span class="status-dot green"></span>
+                    <strong class="incident-name">Violência doméstica</strong>
+                  </div>
+                  <div class="incident-right">
+                    <span class="incident-loc-pill">
+                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      São José de Ribamar - MA
+                    </span>
+                    <span class="incident-datetime">27/09/2026 19:26</span>
+                    <svg viewBox="0 0 24 24" class="incident-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </section>
+
+          <!-- Linha Inferior: Localizador em Retângulo Inteiro -->
+          <section class="animate-fade-in" style="margin-top: 20px;">
+            <div class="dashboard-panel card-panel" style="width: 100%; box-sizing: border-box;">
+              <div class="panel-header" style="margin-bottom: 14px;">
+                <h3 style="margin:0; font-size:16px; font-weight:700; color:#fff;">Localizador</h3>
+              </div>
+
+              <!-- Retângulo do Mapa em 100% da largura -->
+              <div id="dash-google-map" style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; background: #0b0f19; border: 1px solid rgba(255,255,255,0.06);"></div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+
+  <script src="js/icons.js?v=3"></script>
+  <script src="js/store.js?v=3"></script>
+  <script src="js/components.js?v=3"></script>
+  <script src="js/dashboard.js?v=3"></script>
+  <script src="js/registros.js?v=3"></script>
+  <script src="js/interactions.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIRC — Gestão de Usuários</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/registros.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/usuarios.css" />
+  <script>window.location.replace("dashboard.html#usuarios");</script>
+</head>
+<body>
+
+  <div class="ambient-light"></div>
+  <div class="ambient-light-2"></div>
+
+  <div class="app-shell">
+    <aside id="app-sidebar"></aside>
+
+    <main class="main">
+      <div id="app-banner"></div>
+
+      <div class="page-container users-page-container">
+        <header class="page-header">
+          <h2>Usuários & Inteligência Operacional</h2>
+          <p>Gerencie o acesso dos servidores e monitore os indicadores operacionais do sistema.</p>
+        </header>
+
+        <div class="users-dashboard-grid">
+          <div class="users-col-left">
+            <div class="toolbar-end">
+              <button class="btn btn-primary" id="btn-new-user" type="button">
+                <span id="user-plus-icon"></span>
+                Novo usuário
+              </button>
+            </div>
+
+            <div id="users-table-wrap" class="animate-scale-in"></div>
+
+            <h3 class="section-title" style="margin-top: 28px;">Atividade recente</h3>
+            <div class="card divide animate-fade-in delay-200" id="recent-activity-list"></div>
+          </div>
+
+          <div class="users-col-right animate-scale-in delay-100">
+            <div class="ds-analytics-panel">
+              <div class="ds-panel-header">
+                <div class="ds-panel-title">
+                  <span class="ds-neon-indicator"></span>
+                  <span>Inteligência Operacional</span>
+                </div>
+                <div class="ds-period-filter">
+                  <button class="ds-filter-btn active" data-period="30d">30D</button>
+                  <button class="ds-filter-btn" data-period="7d">7D</button>
+                  <button class="ds-filter-btn" data-period="all">Tudo</button>
+                </div>
+              </div>
+
+              <div class="ds-metrics-row">
+                <div class="ds-metric-card">
+                  <div class="ds-metric-label">REGISTROS</div>
+                  <div class="ds-metric-val" id="ds-val-registros">0</div>
+                  <div class="ds-metric-trend ds-trend-up" id="ds-sub-registros">Fichas ativas</div>
+                </div>
+
+                <div class="ds-metric-card">
+                  <div class="ds-metric-label">SERVIDORES</div>
+                  <div class="ds-metric-val" id="ds-val-servidores">0</div>
+                  <div class="ds-metric-trend ds-trend-up" id="ds-sub-servidores">Operadores</div>
+                </div>
+
+                <div class="ds-metric-card">
+                  <div class="ds-metric-label">AUDITORIA</div>
+                  <div class="ds-metric-val" id="ds-val-auditoria">0</div>
+                  <div class="ds-metric-trend ds-trend-up" id="ds-sub-auditoria">Ações</div>
+                </div>
+
+                <div class="ds-metric-card">
+                  <div class="ds-metric-label">ADMINS</div>
+                  <div class="ds-metric-val" id="ds-val-administradores">0</div>
+                  <div class="ds-metric-trend ds-trend-neutral" id="ds-sub-administradores">Gestores</div>
+                </div>
+              </div>
+
+              <div class="ds-charts-row">
+                <div class="ds-chart-card ds-sparkline-card">
+                  <div class="ds-chart-title">Fluxo de Atividade</div>
+                  <div class="ds-sparkline-container" id="ds-sparkline-wrap">
+                    <div class="ds-sparkline-grid">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ds-chart-card ds-donut-card">
+                  <div class="ds-chart-title">Perfis de Acesso</div>
+                  <div class="ds-donut-wrapper">
+                    <div class="ds-donut-ring" id="ds-donut-ring">
+                      <div class="ds-donut-inner" id="ds-donut-inner">0%</div>
+                    </div>
+                  </div>
+                  <div class="ds-donut-legend" id="ds-donut-legend"></div>
+                </div>
+
+                <div class="ds-chart-card ds-ranking-card">
+                  <div class="ds-chart-title">Operações SIRC</div>
+                  <div class="ds-ranking-list" id="ds-ranking-list"></div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <section class="stats-grid stats-grid-2x2 animate-scale-in" style="margin-top: 20px;">
+              <div class="stat-card">
+                <p class="stat-label">TOTAL DE REGISTROS</p>
+                <p class="stat-value" id="stat-total">0</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">CADASTROS (30 DIAS)</p>
+                <p class="stat-value" id="stat-ultimos30">0</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">AÇÕES REGISTRADAS</p>
+                <p class="stat-value" id="stat-acoes">0</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">USUÁRIOS ATIVOS</p>
+                <p class="stat-value" id="stat-usuarios">0</p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/usuarios.js"></script>
+  <script src="js/interactions.js"></script>
+</body>
+</html>

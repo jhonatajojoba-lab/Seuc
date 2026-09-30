@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIRC — Chats & Comunicação Policial</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/chats.css" />
+  <script>window.location.replace("dashboard.html#chats");</script>
+</head>
+<body>
+
+  <div class="ambient-light"></div>
+  <div class="ambient-light-2"></div>
+
+  <div class="app-shell">
+    <aside id="app-sidebar"></aside>
+
+    <main class="main">
+      <div id="app-banner"></div>
+
+      <div class="page-container chats-page-container">
+        <header class="page-header" style="margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+          <div>
+            <h2>Chats & Comunicação Policial</h2>
+            <p>Canais táticos de comunicação interna entre servidores da Delegacia de Caxias-MA.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-new-chat" type="button">
+            <span id="new-chat-icon"></span>
+            Nova conversa
+          </button>
+        </header>
+
+        <div class="chats-layout animate-scale-in">
+          <div class="chats-sidebar-panel">
+            <div class="chats-search-header">
+              <div class="chats-search-wrap">
+                <span id="chats-search-icon"></span>
+                <input
+                  type="text"
+                  id="chats-search-input"
+                  class="chats-search-input"
+                  placeholder="Buscar canal ou servidor..."
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="chats-list-scroll" id="chats-list-container"></div>
+          </div>
+
+          <div class="chats-main-panel">
+            <div class="chat-active-header">
+              <div class="chat-active-title-wrap">
+                <div class="chat-active-icon" id="chat-active-icon-wrap"></div>
+                <div>
+                  <h3 class="chat-active-name" id="chat-active-name">Carregando...</h3>
+                  <p class="chat-active-sub" id="chat-active-sub"></p>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div class="chat-encryption-badge">
+                  <span style="width:7px; height:7px; border-radius:50%; background:#2dd4bf; display:inline-block;"></span>
+                  <span>Canal Protegido &middot; SIRC</span>
+                </div>
+                <button type="button" class="icon-btn icon-btn-danger" id="btn-delete-chat" title="Apagar conversa">
+                  <span id="delete-chat-icon"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages-wrap"></div>
+
+            <div class="chat-input-container">
+              <div class="chat-quick-tags">
+                <span style="font-size:10px; color:var(--slate-500); text-transform:uppercase; font-weight:700;">Atalhos:</span>
+                <button type="button" class="chat-tag-pill" data-tag="[QC-2026]">[QC-2026]</button>
+                <button type="button" class="chat-tag-pill" data-tag="[Urgente]">[Urgente]</button>
+                <button type="button" class="chat-tag-pill" data-tag="[Apoio Tático]">[Apoio Tático]</button>
+                <button type="button" class="chat-tag-pill" data-tag="[Diligência]">[Diligência]</button>
+              </div>
+
+              <form class="chat-input-form" id="chat-input-form">
+                <button type="button" class="icon-btn" id="btn-attach" title="Anexar documento ou mídia">
+                  <span id="btn-attach-icon"></span>
+                </button>
+
+                <div class="chat-input-box">
+                  <input
+                    type="text"
+                    id="chat-message-input"
+                    class="chat-input-field"
+                    placeholder="Digite sua mensagem de comunicação policial..."
+                    autocomplete="off"
+                  />
+                </div>
+
+                <button type="submit" class="chat-send-btn" id="btn-send-message" title="Enviar mensagem">
+                  <span id="btn-send-icon"></span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/chats.js"></script>
+  <script src="js/interactions.js"></script>
+</body>
+</html>

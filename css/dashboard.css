@@ -1,0 +1,861 @@
+/* ============================================================
+   SIRC — Estilos Oficiais do Novo Dashboard (Polícia Civil MA)
+   Design Fiel à Identidade Visual Tática Integrada
+   ============================================================ */
+
+body.dashboard-body {
+  background-color: #0b0f19;
+  color: #e9ecef;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-main-content {
+  background: #0b0f19;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   Barra Superior (Top Navigation Bar) — Integrada ao Topo
+   ============================================================ */
+.top-nav-bar {
+  height: 60px;
+  background: transparent;
+  border-bottom: none;
+  padding: 14px 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 20;
+}
+
+.top-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  max-width: 680px;
+}
+
+.btn-icon-nav {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #adb5bd;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.btn-icon-nav:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.top-search-box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.top-search-box .search-lens {
+  position: absolute;
+  left: 14px;
+  color: #868e96;
+  pointer-events: none;
+}
+
+.top-search-box input {
+  width: 100%;
+  height: 42px;
+  background: rgba(11, 17, 32, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 0 54px 0 38px;
+  color: #ffffff;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.top-search-box input:focus {
+  outline: none;
+  background: rgba(11, 17, 32, 0.95);
+  border-color: rgba(250, 176, 5, 0.5);
+  box-shadow: 0 0 16px rgba(250, 176, 5, 0.2);
+}
+
+.top-search-box input::placeholder {
+  color: #6c757d;
+  font-size: 12.5px;
+}
+
+.search-kbd-badge {
+  position: absolute;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #909296;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: monospace;
+  pointer-events: none;
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notification-btn .badge-dot-count {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #fa5252;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 800;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   Hero Header Panorâmico (Sem caixas ou quadrados)
+   ============================================================ */
+.dashboard-hero-header {
+  position: relative;
+  width: 100%;
+  min-height: 270px;
+  padding: 0 28px 16px 28px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-bg-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 72%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right 25%;
+  opacity: 0.95;
+}
+
+.hero-bg-shield {
+  position: absolute;
+  right: 42px;
+  top: 50%;
+  transform: translateY(-42%);
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.95));
+  z-index: 3;
+}
+
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: 
+    linear-gradient(to right, #0b0f19 0%, rgba(11, 15, 25, 0.98) 24%, rgba(11, 15, 25, 0.78) 44%, rgba(11, 15, 25, 0.2) 68%, transparent 84%),
+    linear-gradient(to bottom, rgba(11, 15, 25, 0.35) 0%, transparent 30%, transparent 68%, #0b0f19 100%);
+}
+
+.hero-title-content {
+  position: relative;
+  z-index: 10;
+  padding-top: 86px;
+  padding-bottom: 10px;
+  max-width: 820px;
+}
+
+.hero-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #fab005;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hero-badge-tag .sparkle-star {
+  font-size: 12px;
+  color: #fab005;
+}
+
+.hero-main-title {
+  font-size: 46px;
+  font-weight: 900;
+  -webkit-text-stroke: 0.6px rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+  text-shadow: 0 3px 20px rgba(0, 0, 0, 0.95), 0 0 1px #ffffff;
+}
+
+.hero-main-desc {
+  font-size: 15.5px;
+  color: #cbd5e1;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+/* ============================================================
+   Container Principal
+   ============================================================ */
+.dashboard-container {
+  position: relative;
+  z-index: 10;
+  margin-top: -24px;
+  padding: 0 28px 48px;
+  max-width: 1400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   Grade dos 4 Cards de Métricas
+   ============================================================ */
+.metrics-grid-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.metric-card {
+  background: rgba(17, 22, 35, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 12px 16px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(250, 176, 5, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.metric-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.metric-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon-box.gold {
+  background: rgba(250, 176, 5, 0.12);
+  color: #fab005;
+  border: 1px solid rgba(250, 176, 5, 0.25);
+}
+
+.mini-sparkline-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 18px;
+  width: 20px;
+}
+
+.mini-sparkline-bars span {
+  width: 3.5px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.metric-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-title {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metric-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  letter-spacing: -0.4px;
+  margin-bottom: 0;
+}
+
+.metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.metric-trend.up {
+  color: #20c997;
+}
+
+.metric-trend.down {
+  color: #fa5252;
+}
+
+/* ============================================================
+   Grade Dupla (Linhas de 2 Colunas)
+   ============================================================ */
+.dashboard-double-row {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 20px;
+}
+
+.dashboard-panel.card-panel {
+  background: rgba(17, 22, 35, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 22px 24px;
+  backdrop-filter: blur(10px);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.panel-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.panel-select-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #ced4da;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.panel-select-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(250, 176, 5, 0.3);
+}
+
+.panel-action-link {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12.5px;
+  color: #fab005;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.panel-action-link:hover {
+  color: #fcc419;
+}
+
+/* ============================================================
+   Gráfico de Barras: Ocorrências por Tipo
+   ============================================================ */
+.bar-chart-container {
+  display: flex;
+  gap: 16px;
+  height: 240px;
+  padding-top: 10px;
+  box-sizing: border-box;
+}
+
+.bar-chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 32px;
+  font-size: 11px;
+  color: #6c757d;
+  padding-bottom: 24px;
+}
+
+.bar-chart-plot-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.bar-chart-plot-area .grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bars-flex-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 100%;
+  padding-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  width: 48px;
+  position: relative;
+}
+
+.bar-val-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.bar-pill {
+  width: 38px;
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, #fab005 0%, #d9480f 100%);
+  box-shadow: 0 4px 12px rgba(250, 176, 5, 0.25);
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.bar-pill:hover {
+  transform: scaleY(1.03);
+  filter: brightness(1.15);
+}
+
+.bar-name-label {
+  position: absolute;
+  bottom: -22px;
+  font-size: 11.5px;
+  color: #adb5bd;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Lista de Ocorrências Recentes
+   ============================================================ */
+.recent-incidents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.recent-incident-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.recent-incident-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(250, 176, 5, 0.3);
+  transform: translateX(2px);
+}
+
+.incident-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.green { background: #20c997; box-shadow: 0 0 8px rgba(32, 201, 151, 0.6); }
+.status-dot.blue { background: #339af0; box-shadow: 0 0 8px rgba(51, 154, 240, 0.6); }
+.status-dot.yellow { background: #fab005; box-shadow: 0 0 8px rgba(250, 176, 5, 0.6); }
+.status-dot.red { background: #fa5252; box-shadow: 0 0 8px rgba(250, 82, 82, 0.6); }
+
+.incident-name {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 13px;
+  color: #f1f3f5;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.incident-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.incident-loc-pill {
+  font-family: Arial, Helvetica, sans-serif !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #909296;
+}
+
+.incident-datetime {
+  font-size: 11px;
+  color: #868e96;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.incident-chevron {
+  color: #6c757d;
+  transition: transform 0.2s ease;
+}
+
+.recent-incident-item:hover .incident-chevron {
+  color: #fab005;
+  transform: translateX(2px);
+}
+
+/* ============================================================
+   Mapa do Maranhão (Mapeamento Visual Tático)
+   ============================================================ */
+.metric-card-clickable {
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.metric-card-clickable:hover {
+  transform: translateY(-4px);
+  border-color: rgba(250, 176, 5, 0.45);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 16px rgba(250, 176, 5, 0.12);
+}
+
+/* ============================================================
+   Mapa Preto Tático (Dark Tactical Map)
+   ============================================================ */
+#dash-google-map {
+  background: #000000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.9);
+}
+
+#dash-google-map .gm-style {
+  background: #000000 !important;
+}
+
+/* Inverte a camada gráfica base das vias/terreno para preto tático escuro */
+#dash-google-map canvas,
+#dash-google-map .gm-style > div:first-child > div:first-child {
+  filter: invert(93%) hue-rotate(180deg) brightness(75%) contrast(140%) !important;
+}
+
+#dash-google-map .gm-control-active {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  color: #fab005 !important;
+}
+
+.dashboard-map-real-wrap {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 820px) {
+  .dashboard-map-real-wrap {
+    flex-direction: column;
+  }
+  .dashboard-map-real-wrap .map-cities-legend {
+    width: 100% !important;
+  }
+}
+
+.map-graphic-box {
+  flex: 1;
+  position: relative;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maranhao-svg-map {
+  width: 100%;
+  height: auto;
+  max-height: 210px;
+}
+
+.map-pulse-ring {
+  animation: map-ping 2s infinite ease-out;
+  transform-origin: 230px 55px;
+}
+
+@keyframes map-ping {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.map-cities-legend {
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.city-stat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.city-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fab005;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.city-bullet.active-caxias {
+  box-shadow: 0 0 8px #fab005;
+}
+
+.city-name {
+  display: block;
+  font-size: 12px;
+  color: #f1f3f5;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.city-count {
+  display: block;
+  font-size: 11px;
+  color: #868e96;
+}
+
+/* ============================================================
+   Donut Chart: Status das Investigações
+   ============================================================ */
+.investigations-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 0;
+}
+
+.donut-chart-box {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+}
+
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.donut-center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.donut-center-number {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.donut-center-sub {
+  display: block;
+  font-size: 11px;
+  color: #868e96;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.donut-legend-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.donut-legend-item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.legend-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-title {
+  color: #ced4da;
+  white-space: nowrap;
+}
+
+.legend-val {
+  color: #ffffff;
+  font-weight: 700;
+  text-align: right;
+}
+
+.legend-pct {
+  color: #868e96;
+  font-size: 11px;
+  width: 28px;
+  text-align: right;
+}
+
+/* ============================================================
+   Responsividade
+   ============================================================ */
+@media (max-width: 1200px) {
+  .metrics-grid-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-double-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .metrics-grid-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-hero-header {
+    padding: 0 16px 20px 16px;
+    min-height: 220px;
+  }
+
+  .hero-title-content {
+    padding-top: 50px;
+  }
+
+  .hero-main-title {
+    font-size: 28px;
+  }
+
+  .hero-bg-shield {
+    display: none;
+  }
+
+  .hero-bg-image {
+    width: 100%;
+    opacity: 0.4;
+  }
+
+  .maranhao-map-container {
+    flex-direction: column;
+  }
+
+  .map-cities-legend {
+    width: 100%;
+  }
+
+  .investigations-donut-wrap {
+    flex-direction: column;
+  }
+}

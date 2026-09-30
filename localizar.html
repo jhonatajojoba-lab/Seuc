@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SIRC — Localização Oficial &bull; Polícia Civil MA</title>
+  <meta name="description" content="Canal Seguro de Transmissão de Localização — Delegacia de Polícia Civil de Caxias/MA" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/localizar.css" />
+</head>
+<body class="localizar-body">
+
+  <div class="ambient-light"></div>
+  <div class="ambient-light-2"></div>
+
+  <main class="localizar-container">
+    <div class="localizar-card animate-scale-in">
+      
+      <!-- Cabeçalho Institucional -->
+      <div class="localizar-header">
+        <img src="img/5C94940E-CCCC-45A4-B8DE-9CCD0839711B.png" alt="Polícia Civil do Maranhão" class="localizar-badge-img" />
+        <p class="localizar-org-title">Polícia Civil do Estado do Maranhão</p>
+        <h1 class="localizar-system-title">SIRC Localização</h1>
+        <p class="localizar-desc">
+          Delegacia de Polícia Civil de Caxias &middot; Canal oficial para confirmação e rastreamento de localização.
+        </p>
+      </div>
+
+      <!-- Caixa de Informações do Indivíduo / Alvo -->
+      <div class="target-info-box" id="target-details-box">
+        <div class="target-info-row">
+          <span class="target-info-label">Nome identificado:</span>
+          <span class="target-info-val" id="disp-nome">Carregando dados...</span>
+        </div>
+        <div class="target-info-row">
+          <span class="target-info-label">Procedimento / Ref.:</span>
+          <span class="target-info-val" id="disp-ref">SIRC-CAXIAS-MA</span>
+        </div>
+        <div class="target-info-row">
+          <span class="target-info-label">Finalidade:</span>
+          <span class="target-info-val" id="disp-motivo" style="color: #fab005;">Acompanhamento Policial</span>
+        </div>
+      </div>
+
+      <!-- Animação do Radar de Busca -->
+      <div class="radar-animation-box" id="radar-box">
+        <div class="radar-circle"></div>
+        <div class="radar-circle"></div>
+        <div class="radar-circle"></div>
+        <div class="radar-center-dot"></div>
+      </div>
+
+      <!-- Status Atual da Transmissão -->
+      <div id="status-container" style="margin: 12px 0;">
+        <span class="status-badge-live" id="status-badge" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color:#adb5bd;">
+          Aguardando autorização de localização
+        </span>
+      </div>
+
+      <!-- O BOTÃO PRINCIPAL SOLICITADO PELO USUÁRIO -->
+      <button type="button" class="btn-quero-localizado" id="btn-quero-localizado">
+        <svg viewBox="0 0 24 24" class="radar-icon-pulse" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Quero ser localizado</span>
+      </button>
+
+      <!-- Opção de rastreamento contínuo -->
+      <label class="checkbox-toggle-wrap">
+        <input type="checkbox" id="chk-continuous" checked />
+        <span>Manter transmissão contínua de sinal em tempo real</span>
+      </label>
+
+      <!-- Mensagens de Sucesso ou Erro -->
+      <div id="feedback-msg" style="display:none; margin-top: 16px; font-size: 13px; line-height: 1.5; padding: 12px; border-radius: 10px;"></div>
+
+      <!-- Coordenadas Transmitidas -->
+      <div class="coords-live-box" id="coords-box">
+        <div><strong>LAT:</strong> <span id="val-lat">-</span> &nbsp;|&nbsp; <strong>LNG:</strong> <span id="val-lng">-</span></div>
+        <div style="margin-top: 4px; font-size: 11.5px; color: #ced4da;">
+          Precisão estimada: &plusmn;<span id="val-acc">-</span>m &bull; Atualizado: <span id="val-time">-</span>
+        </div>
+      </div>
+
+      <div class="localizar-footer-note">
+        🔒 Seus dados são transmitidos com criptografia de ponta a ponta diretamente para o terminal do oficial da Delegacia de Polícia Civil de Caxias-MA.
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/localizar.js"></script>
+</body>
+</html>
