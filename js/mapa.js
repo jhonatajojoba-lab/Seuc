@@ -52,6 +52,39 @@
   let AdvancedMarkerElementClass = null;
   let mapaSyncInterval = null;
 
+  function showConfirmDialog(message, onConfirm) {
+    const modalRoot = document.getElementById("modal-root") || document.body;
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.style.display = "flex";
+    overlay.innerHTML = `
+      <div class="modal modal-sm" style="max-width:440px;">
+        <div class="modal-header modal-header-danger">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fa5252" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h3 style="color:#fa5252; margin:0; font-size:15px;">Confirmação</h3>
+        </div>
+        <div class="modal-body" style="padding:16px;">
+          <p style="color:#e2e8f0; font-size:13px; margin:0; line-height:1.5;">${Store.escapeHtml(message)}</p>
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:8px; padding:12px 16px;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-dialog-cancel">Cancelar</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-dialog-confirm" style="background:#e03131; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-weight:600; cursor:pointer;">Confirmar</button>
+        </div>
+      </div>
+    `;
+    modalRoot.appendChild(overlay);
+
+    const closeDialog = () => overlay.remove();
+    overlay.querySelector("#btn-dialog-cancel")?.addEventListener("click", closeDialog);
+    overlay.querySelector("#btn-dialog-confirm")?.addEventListener("click", async () => {
+      closeDialog();
+      if (onConfirm) await onConfirm();
+    });
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeDialog();
+    });
+  }
+
   async function initMapaPage() {
     const mapRoot = document.getElementById("google-map-root");
     if (!mapRoot) return;
@@ -363,7 +396,9 @@ function renderMarkers() {
           const origin = window.location.origin;
           const fullLink = `${origin}/localizar.html?token=${item.token}`;
           navigator.clipboard.writeText(fullLink);
-          alert(`Link copiado para a área de transferência:\n${fullLink}`);
+          if (window.Store && Store.toast) {
+            Store.toast("Link copiado para a área de transferência!", "success");
+          }
           return;
         }
         const reg = markersRegistry.find((m) => m.id === item.id);
@@ -374,11 +409,11 @@ function renderMarkers() {
         }
       });
 
-      card.querySelector(".btn-delete-target")?.addEventListener("click", async (e) => {
+      card.querySelector(".btn-delete-target")?.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (confirm(`Excluir permanentemente o rastreamento de "${item.nome}" do banco Firebase?`)) {
+        showConfirmDialog(`Excluir permanentemente o rastreamento de "${item.nome}" do banco Firebase?`, async () => {
           await excluirSessao(item.id);
-        }
+        });
       });
 
       listContainer.appendChild(card);
@@ -465,7 +500,9 @@ function focusPerson(item, marker) {
 
   content.querySelector("#btn-copy-coords")?.addEventListener("click", () => {
     navigator.clipboard.writeText(`${item.lat}, ${item.lng}`);
-    alert(`Coordenadas copiadas: ${item.lat}, ${item.lng}`);
+    if (window.Store && Store.toast) {
+      Store.toast(`Coordenadas copiadas: ${item.lat}, ${item.lng}`, "success");
+    }
   });
 
   content.querySelector("#btn-open-sv")?.addEventListener("click", () => {
@@ -479,7 +516,9 @@ function focusPerson(item, marker) {
 function openPendingDetailsModal(item) {
   const origin = window.location.origin;
   const link = `${origin}/localizar.html?token=${item.token}`;
-  alert(`Alvo: ${item.nome}\nStatus: Aguardando abertura do link pelo cidadão.\nLink: ${link}`);
+  if (window.Store && Store.toast) {
+    Store.toast(`Alvo: ${item.nome} (Aguardando acesso ao link)`, "info");
+  }
 }
 
 // 6. Visualizador Street View 360°
@@ -624,19 +663,23 @@ function setupEventListeners() {
   // Botão Limpar Banco
   const btnLimpar = document.getElementById("btn-limpar-tudo");
   if (btnLimpar) {
-    btnLimpar.addEventListener("click", async () => {
-      if (confirm("Deseja realmente apagar TODOS os alvos e localizações do banco de dados Firebase?")) {
+    btnLimpar.addEventListener("click", () => {
+      showConfirmDialog("Deseja realmente apagar TODOS os alvos e localizações do banco de dados Firebase?", async () => {
         try {
           const res = await fetch("/api/rastreio/limpar-tudo", { method: "POST" });
           if (res.ok) {
-            alert("Banco de dados Firebase limpo com sucesso!");
+            if (window.Store && Store.toast) {
+              Store.toast("Banco de dados Firebase limpo com sucesso!", "success");
+            }
             await fetchTrackingFromFirebase();
             renderMarkers();
           }
         } catch (err) {
-          alert("Erro ao limpar banco de dados.");
+          if (window.Store && Store.toast) {
+            Store.toast("Erro ao limpar banco de dados.", "error");
+          }
         }
-      }
+      });
     });
   }
 
@@ -712,11 +755,15 @@ function setupEventListeners() {
           await fetchTrackingFromFirebase();
           renderMarkers();
         } else {
-          alert("Erro ao gravar dados no Firebase. Tente novamente.");
+          if (window.Store && Store.toast) {
+            Store.toast("Erro ao gravar dados no Firebase. Tente novamente.", "error");
+          }
         }
       } catch (err) {
         console.error("Erro ao gerar link de rastreamento:", err);
-        alert("Erro de comunicação com o servidor.");
+        if (window.Store && Store.toast) {
+          Store.toast("Erro de comunicação com o servidor.", "error");
+        }
       } finally {
         if (btnSubmit) {
           btnSubmit.disabled = false;

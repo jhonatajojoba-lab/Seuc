@@ -78,12 +78,13 @@ window.Store = {
       document.body.appendChild(container);
     }
 
+    const borderColor = type === "success" ? "#20c997" : (type === "error" ? "#fa5252" : "#2563eb");
     const toast = document.createElement("div");
-    toast.style.cssText = "pointer-events:auto; display:flex; align-items:center; gap:10px; padding:12px 20px; border-radius:12px; font-size:13.5px; font-weight:600; font-family:-apple-system,BlinkMacSystemFont,sans-serif; color:#ffffff; background:#0f172a; border:1px solid " + (type === "success" ? "#20c997" : "#2563eb") + "; box-shadow:0 12px 36px rgba(0,0,0,0.6); backdrop-filter:blur(16px); transform:translateY(12px); opacity:0; transition:all 0.25s cubic-bezier(0.16,1,0.3,1);";
+    toast.style.cssText = "pointer-events:auto; display:flex; align-items:center; gap:10px; padding:12px 20px; border-radius:12px; font-size:13.5px; font-weight:600; font-family:-apple-system,BlinkMacSystemFont,sans-serif; color:#ffffff; background:#0f172a; border:1px solid " + borderColor + "; box-shadow:0 12px 36px rgba(0,0,0,0.6); backdrop-filter:blur(16px); transform:translateY(12px); opacity:0; transition:all 0.25s cubic-bezier(0.16,1,0.3,1);";
     
     const iconSvg = type === "success" 
       ? '<span style="color:#20c997; font-size:16px; font-weight:bold;">✓</span>' 
-      : '<span style="color:#38bdf8; font-size:16px;">ℹ</span>';
+      : (type === "error" ? '<span style="color:#fa5252; font-size:16px; font-weight:bold;">✕</span>' : '<span style="color:#38bdf8; font-size:16px;">ℹ</span>');
     
     toast.innerHTML = `${iconSvg}<span>${Store.escapeHtml(message)}</span>`;
     container.appendChild(toast);
