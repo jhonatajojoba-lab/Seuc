@@ -1,708 +1,771 @@
 /* ============================================================
    SIRC — Módulo Localizador Tático Policial & Georreferenciamento
+   Design de Alta Fidelidade baseado no Mockup Oficial
    Polícia Civil do Estado do Maranhão
-   Design Tático Militar de Alta Precisão (Arial)
    ============================================================ */
 
-.map-page-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 0 20px 28px;
-  font-family: Arial, Helvetica, sans-serif !important;
-  box-sizing: border-box;
+:root {
+  --loc-bg: #070a12;
+  --loc-card-bg: #0d131f;
+  --loc-card-border: rgba(255, 255, 255, 0.08);
+  --loc-primary-blue: #2563eb;
+  --loc-accent-green: #10b981;
+  --loc-accent-red: #ef4444;
+  --loc-accent-yellow: #f59e0b;
+  --loc-text-main: #f8fafc;
+  --loc-text-muted: #94a3b8;
+  --loc-text-dim: #64748b;
 }
 
-.map-page-container * {
-  font-family: Arial, Helvetica, sans-serif;
+body.light-mode {
+  --loc-bg: #f1f5f9;
+  --loc-card-bg: #ffffff;
+  --loc-card-border: rgba(0, 0, 0, 0.08);
+  --loc-text-main: #0f172a;
+  --loc-text-muted: #64748b;
+  --loc-text-dim: #94a3b8;
 }
 
 /* ============================================================
-   Cabeçalho Tático do Localizador
+   Layout Principal do Localizador
    ============================================================ */
-.map-header-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  background: rgba(13, 17, 28, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 18px 24px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+.locator-main {
+  background: var(--loc-bg);
+  min-height: 100vh;
+  padding: 16px 22px 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  color: var(--loc-text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-.map-title-group {
+.locator-viewport {
+  max-width: 1720px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.locator-badge-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  color: #fab005;
-  text-transform: uppercase;
-}
-
-.pulse-indicator {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fab005;
-  box-shadow: 0 0 8px #fab005;
-  animation: pulse-dot 1.8s infinite;
-}
-
-.map-title-group h2 {
-  font-size: 26px;
-  font-weight: 900;
-  color: #ffffff;
-  margin: 0;
-  letter-spacing: -0.4px;
-  line-height: 1.15;
-}
-
-.map-title-group p {
-  color: #94a3b8;
-  font-size: 13px;
-  margin: 0;
-}
-
-.map-header-actions {
-  display: flex;
-  align-items: center;
   gap: 14px;
+  width: 100%;
+}
+
+/* ============================================================
+   Barra Superior de Busca & Ações
+   ============================================================ */
+.locator-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-.map-stats-badges {
+.locator-search-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.map-stat-pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
-}
-
-.map-stat-pill strong {
-  color: #fab005;
-  font-weight: 800;
-}
-
-.map-stat-pill.live-indicator::before {
-  content: "";
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #20c997;
-  box-shadow: 0 0 8px #20c997;
-  animation: pulse-dot 2s infinite;
-}
-
-.map-btn-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-tactical-primary {
-  background: linear-gradient(135deg, #fab005 0%, #f59f00 100%);
-  color: #0b0f19;
-  font-weight: 800;
-  font-size: 13px;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(250, 176, 5, 0.35);
+  gap: 12px;
+  background: var(--loc-card-bg);
+  border: 1px solid var(--loc-card-border);
+  border-radius: 12px;
+  padding: 10px 18px;
+  flex: 1;
+  max-width: 680px;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
-.btn-tactical-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(250, 176, 5, 0.5);
-  background: #ffc034;
+.locator-search-wrap:focus-within {
+  border-color: rgba(59, 130, 246, 0.55);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-.btn-tactical-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 12.5px;
-  border-radius: 8px;
-  padding: 8px 14px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
+.search-icon-svg {
+  width: 17px;
+  height: 17px;
+  color: var(--loc-text-dim);
+  flex-shrink: 0;
 }
 
-.btn-tactical-secondary:hover {
-  background: rgba(250, 176, 5, 0.12);
-  border-color: rgba(250, 176, 5, 0.3);
-  color: #fab005;
-}
-
-.btn-tactical-ghost {
+.locator-search-wrap input {
   background: transparent;
-  border: 1px solid rgba(255, 107, 107, 0.25);
-  color: #ff6b6b;
-  border-radius: 8px;
-  padding: 8px 10px;
-  cursor: pointer;
+  border: none;
+  outline: none;
+  color: var(--loc-text-main);
+  font-size: 13.5px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.locator-search-wrap input::placeholder {
+  color: var(--loc-text-dim);
+}
+
+.locator-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-location-chip {
+  background: var(--loc-card-bg);
+  border: 1px solid var(--loc-card-border);
+  color: var(--loc-text-main);
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 8px 16px;
   display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-location-chip:hover {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.icon-round-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--loc-card-bg);
+  border: 1px solid var(--loc-card-border);
+  color: var(--loc-text-muted);
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.btn-tactical-ghost:hover {
-  background: rgba(255, 107, 107, 0.15);
-  border-color: #ff6b6b;
-}
-
-/* ============================================================
-   Barra de Filtros e Navegação Rápida por Cidades
-   ============================================================ */
-.map-controls-row {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.map-filter-group {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.btn-map-filter {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 7px 12px;
   cursor: pointer;
+  position: relative;
   transition: all 0.2s ease;
+}
+
+.icon-round-btn:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.notif-badge-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 1.5px solid var(--loc-card-bg);
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.btn-novo-rastreio {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-}
-
-.btn-map-filter:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.18);
-}
-
-.btn-map-filter.active {
-  background: rgba(250, 176, 5, 0.15);
-  border-color: rgba(250, 176, 5, 0.4);
-  color: #fab005;
-  font-weight: 700;
-}
-
-.city-quick-chips {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.chips-label {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-right: 2px;
-}
-
-.city-chip {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
-  font-size: 11.5px;
-  font-weight: 700;
-  padding: 5px 11px;
-  border-radius: 6px;
+  gap: 8px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s ease;
 }
 
-.city-chip:hover {
-  background: rgba(250, 176, 5, 0.15);
-  border-color: rgba(250, 176, 5, 0.4);
-  color: #fab005;
+.btn-novo-rastreio:hover {
+  background: #3b82f6;
   transform: translateY(-1px);
-}
-
-.city-chip.active {
-  background: #fab005;
-  color: #0b0f19;
-  border-color: #fab005;
-  box-shadow: 0 2px 8px rgba(250, 176, 5, 0.3);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
 }
 
 /* ============================================================
-   Espaço de Trabalho: Mapa Tático + Painel Lateral
+   Cards de Métricas Superiores (4 Colunas)
    ============================================================ */
-.map-workspace {
+.locator-stats-row {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 16px;
-  width: 100%;
-  position: relative;
-  align-items: stretch;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
 
-@media (max-width: 1140px) {
-  .map-workspace {
+@media (max-width: 960px) {
+  .locator-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .locator-stats-row {
     grid-template-columns: 1fr;
   }
 }
 
-.map-stage-wrapper {
-  position: relative;
-  width: 100%;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.stat-card {
+  background: var(--loc-card-bg);
+  border: 1px solid var(--loc-card-border);
   border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
-  min-height: 580px;
-  height: calc(100vh - 230px);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-/* CF2: Altura explícita garantida */
+.stat-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.stat-card-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat-card-icon-wrap.icon-person {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+}
+
+.stat-card-icon-wrap.icon-vehicle {
+  background: rgba(59, 130, 246, 0.12);
+  color: #38bdf8;
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.stat-card-icon-wrap.icon-alert {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.stat-card-icon-wrap.icon-monitoring {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.stat-card-content {
+  margin-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-card-number {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--loc-text-main);
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.stat-card-label {
+  font-size: 12px;
+  color: var(--loc-text-muted);
+  font-weight: 500;
+}
+
+.stat-card-status-dot {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.stat-card-status-dot.dot-green {
+  background: var(--loc-accent-green);
+  box-shadow: 0 0 6px var(--loc-accent-green);
+}
+
+.stat-card-status-dot.dot-blue {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.stat-card-status-dot.dot-red {
+  background: var(--loc-accent-red);
+  box-shadow: 0 0 6px var(--loc-accent-red);
+}
+
+.stat-card-status-dot.dot-yellow {
+  background: var(--loc-accent-yellow);
+  box-shadow: 0 0 6px var(--loc-accent-yellow);
+}
+
+/* ============================================================
+   Espaço de Trabalho: Mapa Tático (Esquerda) + Painel (Direita)
+   ============================================================ */
+.locator-workspace {
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  gap: 16px;
+  height: calc(100vh - 200px);
+  min-height: 600px;
+}
+
+@media (max-width: 1180px) {
+  .locator-workspace {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+/* ============================================================
+   Stage do Google Maps & Controles Flutuantes
+   ============================================================ */
+.locator-map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 580px;
+  background: #060910;
+  border: 1px solid var(--loc-card-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+}
+
 #map {
   width: 100%;
   height: 100%;
   min-height: 580px;
-  background: #000000 !important;
 }
 
-#map .gm-style {
-  background: #000000 !important;
-}
-
-#map canvas,
-#map .gm-style > div:first-child > div:first-child {
-  filter: invert(93%) hue-rotate(180deg) brightness(75%) contrast(140%) !important;
-}
-
-/* Overlays flutuantes no mapa (HUD Tático) */
-.map-floating-overlay-top {
+/* Controles de Zoom & Centralizar no Canto Superior Esquerdo */
+.map-floating-controls {
   position: absolute;
-  top: 14px;
-  left: 14px;
+  top: 18px;
+  left: 18px;
   z-index: 10;
-  background: rgba(11, 15, 25, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 8px 12px;
-  backdrop-filter: blur(10px);
-  color: #ffffff;
-  font-size: 11.5px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  pointer-events: auto;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-}
-
-.hud-status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #20c997;
-  box-shadow: 0 0 8px #20c997;
-  animation: pulse-dot 1.8s infinite;
-}
-
-.map-floating-coords {
-  position: absolute;
-  bottom: 22px;
-  left: 14px;
-  z-index: 10;
-  background: rgba(11, 15, 25, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  padding: 5px 11px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #fab005;
-  pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-}
-
-/* ============================================================
-   Painel Lateral Tático Redesenhado
-   ============================================================ */
-.map-sidebar-panel {
-  background: rgba(13, 17, 28, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 230px);
-  min-height: 580px;
+  background: rgba(13, 19, 31, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
-.map-sidebar-nav-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: rgba(0, 0, 0, 0.25);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 6px;
-  gap: 6px;
-}
-
-.sidebar-tab-btn {
-  background: transparent;
-  border: 1px solid transparent;
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
+.map-ctrl-btn {
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.sidebar-tab-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.03);
+.map-ctrl-btn:last-child {
+  border-bottom: none;
 }
 
-.sidebar-tab-btn.active {
-  background: rgba(250, 176, 5, 0.12);
-  border-color: rgba(250, 176, 5, 0.3);
-  color: #fab005;
-}
-
-.tab-badge {
+.map-ctrl-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: inherit;
-  font-size: 10.5px;
-  font-weight: 800;
-  padding: 1px 6px;
-  border-radius: 10px;
+  color: #38bdf8;
 }
 
-.sidebar-tab-btn.active .tab-badge {
-  background: rgba(250, 176, 5, 0.25);
-  color: #fab005;
-}
-
-.map-sidebar-content-view {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px;
+/* Controles no Canto Inferior Direito */
+.map-bottom-controls {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  z-index: 10;
   display: flex;
-  flex-direction: column;
-}
-
-.map-sidebar-list {
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
 
-/* Cards de Alvos */
-.map-item-card {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  padding: 12px 14px;
+.btn-fullscreen-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(13, 19, 31, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  backdrop-filter: blur(10px);
   transition: all 0.2s ease;
+}
+
+.btn-fullscreen-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ============================================================
+   Marcadores Táticos Oficiais (Custom Advanced Markers)
+   ============================================================ */
+.custom-tactical-pin {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
   position: relative;
 }
 
-.map-item-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(250, 176, 5, 0.35);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+.custom-tactical-pin:hover {
+  transform: scale(1.18);
+  z-index: 99;
 }
 
-.map-item-card.active {
-  border-color: #fab005;
-  background: rgba(250, 176, 5, 0.1);
-  box-shadow: 0 0 16px rgba(250, 176, 5, 0.15);
-}
-
-.map-item-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.target-radar-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  flex-shrink: 0;
-}
-
-.target-radar-avatar.active-gps {
-  background: rgba(32, 201, 151, 0.15);
-  color: #20c997;
-  border-color: rgba(32, 201, 151, 0.4);
-}
-
-.map-item-title {
-  font-size: 13.5px;
-  font-weight: 700;
+.custom-tactical-pin.pin-pessoa {
+  background: #10b981;
+  border: 2px solid #ffffff;
   color: #ffffff;
-  margin: 0;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.7);
+}
+
+.custom-tactical-pin.pin-veiculo {
+  background: #3b82f6;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.7);
+}
+
+.custom-tactical-pin.pin-alerta {
+  background: #ef4444;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
+}
+
+.custom-tactical-pin svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Rótulos dos Bairros sobre o Mapa */
+.map-neighborhood-tag {
+  background: transparent;
+  color: rgba(203, 213, 225, 0.7);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  pointer-events: none;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.map-item-natureza {
-  font-size: 11.5px;
-  margin: 2px 0 0 0;
-}
-
-.map-item-location {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11.5px;
-  color: #94a3b8;
-  margin-top: 4px;
 }
 
 /* ============================================================
-   Lista das 5 Unidades Regionais (Cidades do Maranhão)
-   Redesenhada em Cards Modernos com Ação Imediata
+   Painel Lateral Direito: "Pessoas Localizadas"
    ============================================================ */
-.regional-cities-list {
+.locator-sidebar-panel {
+  background: var(--loc-card-bg);
+  border: 1px solid var(--loc-card-border);
+  border-radius: 16px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  height: 100%;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
 }
 
-.regional-city-card {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+/* Abas Superiores Segmentadas */
+.panel-filter-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px;
   border-radius: 10px;
-  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.panel-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--loc-text-muted);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   transition: all 0.2s ease;
+}
+
+.panel-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.panel-tab-btn.active {
+  background: var(--loc-primary-blue);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+}
+
+/* Cabeçalho da Seção no Painel */
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 2px;
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--loc-text-main);
+  margin: 0;
+}
+
+.online-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.badge-dot-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+/* Lista de Alvos */
+.panel-targets-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.panel-targets-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel-targets-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.target-row-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.regional-city-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(250, 176, 5, 0.35);
-  transform: translateY(-1px);
+.target-row-card:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateX(2px);
 }
 
-.city-card-left {
+.target-row-card.active {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: #2563eb;
+}
+
+.target-row-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
+  flex: 1;
 }
 
-.city-card-pin {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: rgba(250, 176, 5, 0.12);
-  color: #fab005;
+.target-avatar-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.city-card-name {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #ffffff;
+.target-avatar-badge.pessoa {
+  background: rgba(16, 185, 129, 0.14);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.target-avatar-badge.veiculo {
+  background: rgba(59, 130, 246, 0.14);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.target-avatar-badge.alerta {
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.target-avatar-badge svg {
+  width: 17px;
+  height: 17px;
+}
+
+.target-meta-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--loc-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0;
 }
 
-.city-card-role {
+.target-meta-location {
   font-size: 11.5px;
-  color: #94a3b8;
+  color: var(--loc-text-muted);
   margin: 2px 0 0 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.city-locate-btn {
-  background: rgba(250, 176, 5, 0.1);
-  border: 1px solid rgba(250, 176, 5, 0.25);
-  color: #fab005;
+.target-row-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.target-time-dist {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.target-time-val {
   font-size: 11px;
-  font-weight: 700;
-  border-radius: 6px;
-  padding: 5px 9px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s ease;
+  color: var(--loc-text-muted);
+  font-weight: 500;
 }
 
-.city-locate-btn:hover {
-  background: #fab005;
-  color: #0b0f19;
+.target-dist-val {
+  font-size: 11px;
+  color: var(--loc-text-dim);
+  font-family: monospace;
 }
 
-/* Modais e Utilitários */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.82);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
+.target-chevron-icon {
+  color: var(--loc-text-dim);
+  width: 14px;
+  height: 14px;
+}
+
+/* Ação Inferior do Painel */
+.panel-footer-actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
 }
 
-.modal {
-  background: #0f1523;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-  width: 100%;
-  color: #ffffff;
-  overflow: hidden;
-}
-
-.modal-header {
-  padding: 16px 20px;
-  display: flex;
+.btn-view-all-targets {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 6px;
+  transition: all 0.2s ease;
 }
 
-.modal-body {
-  padding: 20px;
+.btn-view-all-targets:hover {
+  color: #60a5fa;
+  transform: translateX(3px);
 }
 
-.modal-footer {
-  padding: 14px 20px;
-  background: rgba(0, 0, 0, 0.25);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+/* InfoWindow Customizada */
+.gmp-police-infowindow {
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  max-width: 280px;
+}
+
+.gmp-police-infowindow h4 {
+  margin: 6px 0 4px 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.gmp-police-infowindow p {
+  margin: 2px 0;
+  font-size: 11.5px;
+  color: #475569;
+}
+
+.gmp-infowindow-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  gap: 6px;
+  margin-top: 10px;
 }
 
-.generated-link-box {
-  background: rgba(32, 201, 151, 0.08);
-  border: 1px solid rgba(32, 201, 151, 0.3);
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.generated-link-input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(32, 201, 151, 0.4);
-  color: #20c997;
-  font-family: monospace;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 8px 10px;
-  border-radius: 6px;
-  margin-top: 6px;
-  box-sizing: border-box;
-}
-
-.field {
-  margin-bottom: 14px;
-}
-
-.field label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: #94a3b8;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.field input[type="text"] {
-  width: 100%;
-  background: #171e2e;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.gmp-infowindow-btn {
+  background: #2563eb;
   color: #ffffff;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  box-sizing: border-box;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.field-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-@keyframes pulse-dot {
-  0% { transform: scale(0.9); opacity: 0.8; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0.9); opacity: 0.8; }
+.gmp-infowindow-btn.btn-streetview {
+  background: #0f172a;
 }

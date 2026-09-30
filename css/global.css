@@ -62,6 +62,27 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Proteção Anti-FOUC e contenção estrita de SVGs */
+body {
+  opacity: 1;
+}
+
+svg {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+svg:not([width]) {
+  width: 20px;
+  height: 20px;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 h1, h2, h3, h4, h5 {
   font-family: var(--font-heading);
   margin: 0;

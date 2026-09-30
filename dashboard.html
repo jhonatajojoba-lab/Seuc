@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIRC — Polícia Civil do Maranhão &bull; Visão Geral</title>
   <meta name="description" content="Painel de Controle e Inteligência Policial — Polícia Civil do Estado do Maranhão" />
+  <style>
+    html { background-color: #070b12; }
+    body { opacity: 0; }
+    body.app-ready { opacity: 1; transition: opacity 0.1s ease-in; }
+    svg { max-width: 100%; }
+    svg:not([width]) { width: 20px; height: 20px; }
+  </style>
+  <script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => document.body.classList.add('app-ready'));
+    } else {
+      document.body.classList.add('app-ready');
+    }
+    setTimeout(() => { if (document.body) document.body.classList.add('app-ready'); }, 150);
+  </script>
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/sidebar.css" />
   <link rel="stylesheet" href="css/dashboard.css" />

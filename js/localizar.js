@@ -5,10 +5,27 @@
 let currentToken = null;
 let currentSession = null;
 let watchId = null;
+let lastKnownLat = null;
+let lastKnownLng = null;
+let selectedAlertType = "SOS Emergência";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   currentToken = urlParams.get("token");
+
+  // Configurar botões de tipo de alerta
+  document.querySelectorAll(".btn-alert-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".btn-alert-pill").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedAlertType = btn.getAttribute("data-type") || btn.textContent.trim();
+    });
+  });
+
+  const btnSendAlert = document.getElementById("btn-send-alert");
+  if (btnSendAlert) {
+    btnSendAlert.addEventListener("click", emitirAlertaPolicial);
+  }
 
   if (!currentToken) {
     const dispNome = document.getElementById("disp-nome");
@@ -73,16 +90,12 @@ async function carregarDadosSessao(token) {
 // 2. Ação ao Clicar em "Quero ser localizado"
 async function iniciarLocalizacao() {
   const btn = document.getElementById("btn-quero-localizado");
-  const radar = document.getElementById("radar-box");
-  const statusBadge = document.getElementById("status-badge");
   const feedback = document.getElementById("feedback-msg");
 
-  btn.disabled = true;
-  btn.querySelector("span").textContent = "Obtendo sinal GPS dos satélites...";
-  if (radar) radar.style.display = "block";
-  if (statusBadge) {
-    statusBadge.className = "status-badge-live transmitting";
-    statusBadge.textContent = "Buscando coordenadas de alta precisão...";
+  if (btn) {
+    btn.disabled = true;
+    const span = btn.querySelector("span");
+    if (span) span.textContent = "Obtendo localização...";
   }
 
   if (!navigator.geolocation) {
@@ -105,9 +118,8 @@ async function iniciarLocalizacao() {
       await enviarLocalizacaoParaDelegacia(lat, lng, accuracy);
       finalizarSucesso(lat, lng, accuracy);
 
-      // Iniciar acompanhamento contínuo se checkbox estiver ativo
-      const continuous = document.getElementById("chk-continuous")?.checked;
-      if (continuous && !watchId) {
+      // Iniciar acompanhamento contínuo automático em tempo real
+      if (!watchId) {
         watchId = navigator.geolocation.watchPosition(
           async (pos) => {
             await enviarLocalizacaoParaDelegacia(
@@ -115,7 +127,6 @@ async function iniciarLocalizacao() {
               pos.coords.longitude,
               pos.coords.accuracy || 8
             );
-            exibirCoordenadas(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 8);
           },
           (err) => console.warn("Watch position aviso:", err),
           options
@@ -133,6 +144,8 @@ async function iniciarLocalizacao() {
 
 // 3. Enviar Coordenadas para o Backend SIRC
 async function enviarLocalizacaoParaDelegacia(lat, lng, precisao) {
+  lastKnownLat = lat;
+  lastKnownLng = lng;
   try {
     const payload = {
       token: currentToken,
@@ -140,7 +153,7 @@ async function enviarLocalizacaoParaDelegacia(lat, lng, precisao) {
       lng,
       precisao,
       bairro: "Caxias - MA",
-      enderecoAproximado: `Coordenadas enviadas pelo dispositivo (${lat.toFixed(5)}, ${lng.toFixed(5)})`,
+      enderecoAproximado: `Coordenadas transmitidas (${lat.toFixed(5)}, ${lng.toFixed(5)})`,
     };
 
     const res = await fetch("/api/rastreio/atualizar", {
@@ -150,10 +163,90 @@ async function enviarLocalizacaoParaDelegacia(lat, lng, precisao) {
     });
 
     if (res.ok) {
-      console.log("[SIRC] Localização transmitida com sucesso.");
+      console.log("[SIRC] Localização transmitida com sucesso ao Firebase.");
     }
   } catch (err) {
     console.error("Erro ao enviar dados para a delegacia:", err);
+  }
+}
+
+// 4. Emitir Alerta de Emergência / SOS do Cidadão
+async function emitirAlertaPolicial() {
+  const btn = document.getElementById("btn-send-alert");
+  const msgInput = document.getElementById("alert-custom-msg");
+  const alertFeedback = document.getElementById("alert-feedback-msg");
+  const customMsg = msgInput ? msgInput.value.trim() : "";
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span>Transmitindo Alerta para a Delegacia...</span>`;
+  }
+
+  // Se ainda não capturou localização, tentar pegar rapidamente
+  if (lastKnownLat == null && navigator.geolocation) {
+    try {
+      await new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            lastKnownLat = pos.coords.latitude;
+            lastKnownLng = pos.coords.longitude;
+            resolve();
+          },
+          () => resolve(),
+          { timeout: 3000, enableHighAccuracy: true }
+        );
+      });
+    } catch (e) {}
+  }
+
+  try {
+    const payload = {
+      token: currentToken,
+      tipoAlerta: selectedAlertType || "SOS Emergência",
+      mensagem: customMsg || "Alerta emitido pelo cidadão através do portal SIRC.",
+      lat: lastKnownLat,
+      lng: lastKnownLng
+    };
+
+    const res = await fetch("/api/rastreio/alerta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      if (alertFeedback) {
+        alertFeedback.style.display = "block";
+        alertFeedback.style.background = "rgba(224, 49, 49, 0.25)";
+        alertFeedback.style.border = "1px solid rgba(224, 49, 49, 0.6)";
+        alertFeedback.style.color = "#ff8787";
+        alertFeedback.innerHTML = `
+          <strong>🚨 ALERTA TRANSMITIDO COM SUCESSO!</strong><br />
+          Sua mensagem e coordenadas de emergência foram notificadas com prioridade máxima aos oficiais no Mapa Tático da Delegacia de Caxias-MA.
+        `;
+      }
+      if (btn) {
+        btn.style.background = "linear-gradient(135deg, #2b8a3e, #237032)";
+        btn.innerHTML = `<span>✓ Alerta Notificado à Polícia</span>`;
+      }
+    } else {
+      if (alertFeedback) {
+        alertFeedback.style.display = "block";
+        alertFeedback.style.background = "rgba(250, 82, 82, 0.2)";
+        alertFeedback.style.color = "#ff6b6b";
+        alertFeedback.textContent = "Erro ao transmitir alerta. Tente novamente.";
+      }
+    }
+  } catch (err) {
+    console.error("Erro ao emitir alerta:", err);
+    if (alertFeedback) {
+      alertFeedback.style.display = "block";
+      alertFeedback.style.background = "rgba(250, 82, 82, 0.2)";
+      alertFeedback.style.color = "#ff6b6b";
+      alertFeedback.textContent = "Falha de conexão com a Delegacia.";
+    }
+  } finally {
+    if (btn) btn.disabled = false;
   }
 }
 

@@ -134,104 +134,106 @@ body.localizar-body {
   transform: translateY(1px);
 }
 
-.btn-quero-localizado .radar-icon-pulse {
-  width: 24px;
-  height: 24px;
+.btn-quero-localizado svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
-/* Radar Wave Animation */
-.radar-animation-box {
-  display: none;
-  margin: 20px auto;
-  position: relative;
-  width: 90px;
-  height: 90px;
+.btn-alert-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ced4da;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.radar-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 2px solid #fab005;
-  animation: radar-wave 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+.btn-alert-pill:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ff8787;
 }
 
-.radar-circle:nth-child(2) {
-  animation-delay: 0.6s;
+.btn-alert-pill.active {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ff8787;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
 }
 
-.radar-circle:nth-child(3) {
-  animation-delay: 1.2s;
+.btn-send-alert:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
-.radar-center-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 14px;
-  height: 14px;
-  background: #fab005;
-  border-radius: 50%;
-  box-shadow: 0 0 12px #fab005;
-}
-
-@keyframes radar-wave {
-  0% {
-    width: 14px;
-    height: 14px;
-    opacity: 1;
-  }
-  100% {
-    width: 90px;
-    height: 90px;
-    opacity: 0;
-  }
-}
-
-/* Status Card */
+/* Status Badge & Coords Box */
 .status-badge-live {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 6px 14px;
   border-radius: 20px;
-  font-size: 12.5px;
-  font-weight: 600;
-  background: rgba(43, 138, 62, 0.15);
-  border: 1px solid rgba(43, 138, 62, 0.35);
-  color: #51cf66;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #adb5bd;
+  margin-bottom: 12px;
 }
 
-.status-badge-live.transmitting::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #40c057;
-  box-shadow: 0 0 8px #51cf66;
-  animation: live-pulse 1.5s infinite;
+.status-badge-live.transmitting {
+  background: rgba(32, 201, 151, 0.15);
+  border-color: rgba(32, 201, 151, 0.4);
+  color: #20c997;
+  animation: pulse-badge 2s infinite ease-in-out;
 }
 
-@keyframes live-pulse {
-  0% { transform: scale(0.9); opacity: 0.7; }
-  50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.9); opacity: 0.7; }
+@keyframes pulse-badge {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(32, 201, 151, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(32, 201, 151, 0); }
 }
 
-.coords-live-box {
-  display: none;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(250, 176, 5, 0.2);
+.coords-box {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(32, 201, 151, 0.35);
   border-radius: 12px;
   padding: 14px;
-  margin-top: 16px;
-  font-size: 13px;
+  margin: 16px 0;
+  text-align: left;
+}
+
+.coords-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.coords-item {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.coords-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  display: block;
+}
+
+.coords-val {
   font-family: monospace;
-  color: #fab005;
+  font-size: 13px;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-top: 2px;
+  display: block;
 }
 
 .localizar-footer-note {
@@ -239,21 +241,4 @@ body.localizar-body {
   font-size: 11.5px;
   color: #868e96;
   line-height: 1.4;
-}
-
-.checkbox-toggle-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #ced4da;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.checkbox-toggle-wrap input[type="checkbox"] {
-  accent-color: #fab005;
-  width: 16px;
-  height: 16px;
 }

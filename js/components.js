@@ -18,9 +18,9 @@ window.Components = {
     if (!sidebarEl) return;
 
     const navItems = [
-      { key: "dashboard", label: "Visão Geral", icon: "dashboard", href: "dashboard.html" },
+      { key: "dashboard", label: "Início", icon: "home", href: "dashboard.html" },
       { key: "registros", label: "Registros", icon: "fileText", href: "registros.html" },
-      { key: "mapa", label: "Localizador", icon: "mapPin", href: "mapa.html" },
+      { key: "mapa", label: "Mapa Localizador", icon: "mapPin", href: "mapa.html" },
       { key: "auditoria", label: "Auditoria", icon: "clipboardCheck", href: "auditoria.html" },
       { key: "chats", label: "Chats", icon: "messageSquare", href: "chats.html" },
       { key: "usuarios", label: "Usuários", icon: "users", href: "usuarios.html" },
@@ -29,7 +29,8 @@ window.Components = {
 
     // Ícones fieis com proporção e formato idênticos ao layout da Polícia Civil
     const iconsMap = {
-      dashboard: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>`,
+      home: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+      dashboard: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
       fileText: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
       mapPin: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
       clipboardCheck: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="15" y2="15"/></svg>`,
@@ -333,17 +334,27 @@ window.Components = {
       document.title = doc.title;
     }
 
-    // Inject any new stylesheets into document head
+    // Inject any new stylesheets into document head and wait for them to load (avoids FOUC)
     const styleLinks = doc.querySelectorAll('link[rel="stylesheet"]');
+    const loadPromises = [];
     styleLinks.forEach((link) => {
       const href = link.getAttribute("href");
       if (href && !document.querySelector(`link[href="${href}"]`)) {
         const newLink = document.createElement("link");
         newLink.rel = "stylesheet";
         newLink.href = href;
+        const p = new Promise((resolve) => {
+          newLink.onload = resolve;
+          newLink.onerror = resolve;
+        });
+        loadPromises.push(p);
         document.head.appendChild(newLink);
       }
     });
+
+    if (loadPromises.length > 0) {
+      await Promise.all(loadPromises);
+    }
 
     // Replace <main> instantaneously
     const newMain = doc.querySelector("main");
@@ -353,6 +364,14 @@ window.Components = {
       currentMain.innerHTML = newMain.innerHTML;
       currentMain.scrollTop = 0;
     }
+
+    // Transfer all page modals into the current DOM so actions like "Novo Alvo" always find their dialogs
+    const targetModals = doc.querySelectorAll(".modal-overlay");
+    targetModals.forEach((modal) => {
+      const existing = document.getElementById(modal.id);
+      if (existing) existing.remove();
+      document.body.appendChild(modal.cloneNode(true));
+    });
 
     // Clear modal-root
     const currentModalRoot = document.getElementById("modal-root");

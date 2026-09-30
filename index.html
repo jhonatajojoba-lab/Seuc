@@ -10,6 +10,21 @@
   <meta property="og:title" content="SIRC - Sistema Integrado de Registros Criminais" />
   <meta property="og:description"
     content="Sistema Integrado de Registros Criminais da Delegacia de Polícia Civil de Caxias-MA" />
+  <style>
+    html { background-color: #000000; }
+    body { opacity: 0; }
+    body.app-ready { opacity: 1; transition: opacity 0.1s ease-in; }
+    svg { max-width: 100%; }
+    svg:not([width]) { width: 20px; height: 20px; }
+  </style>
+  <script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => document.body.classList.add('app-ready'));
+    } else {
+      document.body.classList.add('app-ready');
+    }
+    setTimeout(() => { if (document.body) document.body.classList.add('app-ready'); }, 150);
+  </script>
   <link rel="stylesheet" href="css/global.css?v=3" />
   <link rel="stylesheet" href="css/login.css?v=3" />
 </head>

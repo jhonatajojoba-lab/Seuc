@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>SIRC — Localização Oficial &bull; Polícia Civil MA</title>
   <meta name="description" content="Canal Seguro de Transmissão de Localização — Delegacia de Polícia Civil de Caxias/MA" />
+  <style>
+    html { background-color: #0d0e11; }
+    body { opacity: 0; }
+    body.app-ready { opacity: 1; transition: opacity 0.1s ease-in; }
+    svg { max-width: 100%; }
+    svg:not([width]) { width: 20px; height: 20px; }
+  </style>
+  <script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => document.body.classList.add('app-ready'));
+    } else {
+      document.body.classList.add('app-ready');
+    }
+    setTimeout(() => { if (document.body) document.body.classList.add('app-ready'); }, 150);
+  </script>
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/localizar.css" />
 </head>
@@ -14,6 +29,14 @@
   <div class="ambient-light-2"></div>
 
   <main class="localizar-container">
+    <!-- Barra superior para retorno ao painel policial -->
+    <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+      <a href="mapa.html" class="btn-voltar-mapa" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #fab005; text-decoration: none; padding: 6px 12px; border-radius: 8px; background: rgba(250, 176, 5, 0.08); border: 1px solid rgba(250, 176, 5, 0.25); font-weight: 600;">
+        &larr; Voltar ao Painel da Polícia
+      </a>
+      <span style="font-size: 11px; color: #64748b;">Canal Oficial &bull; Caxias-MA</span>
+    </div>
+
     <div class="localizar-card animate-scale-in">
       
       <!-- Cabeçalho Institucional -->
@@ -21,6 +44,9 @@
         <img src="img/5C94940E-CCCC-45A4-B8DE-9CCD0839711B.png" alt="Polícia Civil do Maranhão" class="localizar-badge-img" />
         <p class="localizar-org-title">Polícia Civil do Estado do Maranhão</p>
         <h1 class="localizar-system-title">SIRC Localização</h1>
+        <div id="status-badge" class="status-badge-live">
+          ⚪ Aguardando Ativação do Sinal
+        </div>
         <p class="localizar-desc">
           Delegacia de Polícia Civil de Caxias &middot; Canal oficial para confirmação e rastreamento de localização.
         </p>
@@ -42,45 +68,68 @@
         </div>
       </div>
 
-      <!-- Animação do Radar de Busca -->
-      <div class="radar-animation-box" id="radar-box">
-        <div class="radar-circle"></div>
-        <div class="radar-circle"></div>
-        <div class="radar-circle"></div>
-        <div class="radar-center-dot"></div>
-      </div>
-
-      <!-- Status Atual da Transmissão -->
-      <div id="status-container" style="margin: 12px 0;">
-        <span class="status-badge-live" id="status-badge" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color:#adb5bd;">
-          Aguardando autorização de localização
-        </span>
-      </div>
-
-      <!-- O BOTÃO PRINCIPAL SOLICITADO PELO USUÁRIO -->
+      <!-- O BOTÃO PRINCIPAL DE ATIVAÇÃO DE LOCALIZAÇÃO -->
       <button type="button" class="btn-quero-localizado" id="btn-quero-localizado">
-        <svg viewBox="0 0 24 24" class="radar-icon-pulse" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
           <circle cx="12" cy="10" r="3"/>
         </svg>
-        <span>Quero ser localizado</span>
+        <span>Ativar Minha Localização</span>
       </button>
 
-      <!-- Opção de rastreamento contínuo -->
-      <label class="checkbox-toggle-wrap">
-        <input type="checkbox" id="chk-continuous" checked />
-        <span>Manter transmissão contínua de sinal em tempo real</span>
-      </label>
+      <!-- Caixa de Coordenadas Transmitidas -->
+      <div id="coords-box" class="coords-box" style="display:none;">
+        <span style="font-size: 11px; text-transform: uppercase; color: #20c997; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+          🟢 Telemetria GPS Transmitida em Tempo Real:
+        </span>
+        <div class="coords-grid">
+          <div class="coords-item">
+            <span class="coords-label">Latitude</span>
+            <span class="coords-val" id="val-lat">—</span>
+          </div>
+          <div class="coords-item">
+            <span class="coords-label">Longitude</span>
+            <span class="coords-val" id="val-lng">—</span>
+          </div>
+          <div class="coords-item">
+            <span class="coords-label">Precisão</span>
+            <span class="coords-val"><span id="val-acc">—</span> m</span>
+          </div>
+          <div class="coords-item">
+            <span class="coords-label">Último Envio</span>
+            <span class="coords-val" id="val-time">—</span>
+          </div>
+        </div>
+      </div>
 
-      <!-- Mensagens de Sucesso ou Erro -->
+      <!-- Mensagens de Sucesso ou Erro de Localização -->
       <div id="feedback-msg" style="display:none; margin-top: 16px; font-size: 13px; line-height: 1.5; padding: 12px; border-radius: 10px;"></div>
 
-      <!-- Coordenadas Transmitidas -->
-      <div class="coords-live-box" id="coords-box">
-        <div><strong>LAT:</strong> <span id="val-lat">-</span> &nbsp;|&nbsp; <strong>LNG:</strong> <span id="val-lng">-</span></div>
-        <div style="margin-top: 4px; font-size: 11.5px; color: #ced4da;">
-          Precisão estimada: &plusmn;<span id="val-acc">-</span>m &bull; Atualizado: <span id="val-time">-</span>
+      <!-- SEÇÃO DE ALERTAS E COMUNICAÇÃO COM A POLÍCIA -->
+      <div class="citizen-alert-section" id="citizen-alert-box" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); text-align: left;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom: 8px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#ef4444" stroke-width="2.2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span style="font-weight: 700; font-size: 14px; color: #fff;">Emitir Alerta para a Delegacia</span>
         </div>
+        <p style="font-size: 12px; color: #adb5bd; margin-bottom: 12px; line-height: 1.4;">
+          Caso esteja em situação de perigo ou queira reportar algo aos policiais no mapa da Delegacia:
+        </p>
+
+        <!-- Botões Rápidos de Tipo de Alerta -->
+        <div class="alert-pills-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom: 10px;">
+          <button type="button" class="btn-alert-pill active" data-type="SOS Emergência">🚨 SOS / Emergência</button>
+          <button type="button" class="btn-alert-pill" data-type="Suspeito no Local">⚠️ Suspeito no Local</button>
+          <button type="button" class="btn-alert-pill" data-type="Preciso de Apoio">🛡️ Preciso de Apoio</button>
+        </div>
+
+        <input type="text" id="alert-custom-msg" placeholder="Observação ou mensagem (opcional)..." style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:10px 12px; color:#fff; font-size:13px; margin-bottom: 10px;" />
+
+        <button type="button" id="btn-send-alert" class="btn-send-alert" style="width:100%; background:linear-gradient(135deg, #e03131, #c92a2a); border:none; color:#fff; padding:12px; border-radius:10px; font-weight:700; font-size:13.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Transmitir Alerta para a Polícia</span>
+        </button>
+
+        <div id="alert-feedback-msg" style="display:none; margin-top: 10px; font-size: 12.5px; padding: 10px; border-radius: 8px;"></div>
       </div>
 
       <div class="localizar-footer-note">

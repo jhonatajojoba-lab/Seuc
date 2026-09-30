@@ -201,6 +201,53 @@ app.post('/api/rastreio/atualizar', async (req, res) => {
   }
 });
 
+// Emitir Alerta ou SOS do cidadão diretamente para o terminal da Polícia Civil
+app.post('/api/rastreio/alerta', async (req, res) => {
+  const { token, tipoAlerta, mensagem, lat, lng } = req.body || {};
+  if (!token) {
+    return res.status(400).json({ error: 'Token é obrigatório para registrar alerta.' });
+  }
+
+  try {
+    if (!db) throw new Error('Firestore não está conectado');
+    const q = query(collection(db, 'tracking_sessions'), where('token', '==', token));
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      return res.status(404).json({ error: 'Sessão de rastreamento não encontrada.' });
+    }
+
+    const docSnap = snap.docs[0];
+    const targetRef = doc(db, 'tracking_sessions', docSnap.id);
+    const current = docSnap.data();
+
+    const nowIso = new Date().toISOString();
+    const updateData = {
+      alertaAtivo: true,
+      tipoAlerta: tipoAlerta || 'SOS Emergência',
+      mensagemAlerta: mensagem ? mensagem.trim() : 'Alerta de socorro emitido pelo cidadão.',
+      dataAlerta: nowIso,
+      tipo: 'Alerta de Urgência / Mandado',
+      ultimaAtualizacao: nowIso
+    };
+
+    if (lat != null && lng != null) {
+      updateData.lat = parseFloat(lat);
+      updateData.lng = parseFloat(lng);
+      updateData.localizado = true;
+    }
+
+    await updateDoc(targetRef, updateData);
+    res.json({
+      success: true,
+      message: 'Alerta de emergência gravado no Firebase e transmitido para o mapa da Delegacia.',
+      session: { id: docSnap.id, ...current, ...updateData }
+    });
+  } catch (err) {
+    console.error('[SIRC] Erro ao registrar alerta no Firestore:', err);
+    res.status(500).json({ error: 'Erro ao registrar alerta no banco de dados' });
+  }
+});
+
 // Encerrar / Excluir rastreamento no Firebase Firestore
 app.delete('/api/rastreio/encerrar/:id', async (req, res) => {
   try {
